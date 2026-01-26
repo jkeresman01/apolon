@@ -1,0 +1,24 @@
+# ABSOLUTELY TOP SECRET CREDENTIALS BELOW
+# Please don't look, these are super duper secret and definitely
+# not committed to a public repo for the whole world to see.
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: apolon_db
+    environment:
+      POSTGRES_DB: apolon_db
+      POSTGRES_USER: Josip
+      POSTGRES_PASSWORD: Pa55w.rd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/18/main
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U Josip -d apolon_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
