@@ -90,3 +90,31 @@ expressions (Go doesn't have those - so we do a bit of magic).</i></h6>
 ```bash
 go get github.com/jkeresman01/apolon
 ```
+
+### Generating Field Accessors
+
+Apolon requires generating typed field accessors for your models. Add the `go:generate` directive to your model file:
+
+```go
+//go:generate go run github.com/jkeresman01/apolon/apolon-cli generate -i . -o .
+
+type Patient struct {
+    ID   int    `apolon:"id,pk"`
+    Name string `apolon:"name"`
+    Age  int    `apolon:"age"`
+}
+```
+
+Then run:
+
+```bash
+go generate ./...
+```
+
+This creates a `model_fields.go` file with typed accessors like `PatientFields.Age`, `PatientFields.Name`, etc. that you can use in queries.
+
+You can also run the generator manually:
+
+```bash
+go run github.com/jkeresman01/apolon/apolon-cli generate -i ./models -o ./models
+```
