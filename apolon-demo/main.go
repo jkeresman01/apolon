@@ -46,7 +46,7 @@ func main() {
 	patients, err := apolon.Set[Patient](db).
 		OrderBy(PatientFields.Name.Asc()).
 		AsNoTracking().
-		ToList()
+		ToSlice()
 	if err != nil {
 		log.Fatal("query failed:", err)
 	}
@@ -58,7 +58,7 @@ func main() {
 	adults, err := apolon.Set[Patient](db).
 		Where(PatientFields.Age.Gt(18)).
 		AsNoTracking().
-		ToList()
+		ToSlice()
 	if err != nil {
 		log.Fatal("query failed:", err)
 	}
@@ -71,7 +71,7 @@ func main() {
 	matched, err := apolon.Set[Patient](db).
 		Where(PatientFields.Name.Contains("Milica")).
 		AsNoTracking().
-		ToList()
+		ToSlice()
 	if err != nil {
 		log.Fatal("query failed:", err)
 	}
@@ -86,7 +86,7 @@ func main() {
 			PatientFields.Age.Gt(25),
 		)).
 		AsNoTracking().
-		ToList()
+		ToSlice()
 	if err != nil {
 		log.Fatal("query failed:", err)
 	}
@@ -115,15 +115,15 @@ func main() {
 	}
 	fmt.Printf("After: %s, Age=%d (rows affected: %d)\n", patient.Name, patient.Age, affected)
 
-	fmt.Println("\nDelete")
-	toDelete, _ := apolon.Set[Patient](db).
-		Where(PatientFields.Name.Eq("Milica3")).
-		First()
-	if toDelete != nil {
-		db.Remove(toDelete)
-		affected, _ = db.SaveChanges()
-		fmt.Printf("Deleted Milica3 (rows affected: %d)\n", affected)
-	}
+	// fmt.Println("\nDelete")
+	// toDelete, _ := apolon.Set[Patient](db).
+	// 	Where(PatientFields.Name.Eq("Milica3")).
+	// 	First()
+	// if toDelete != nil {
+	// 	db.Remove(toDelete)
+	// 	affected, _ = db.SaveChanges()
+	// 	fmt.Printf("Deleted Milica3 (rows affected: %d)\n", affected)
+	// }
 
 	fmt.Println("\nGenerated SQL Examples")
 	sql, args := apolon.Set[Patient](db).
@@ -139,7 +139,7 @@ func main() {
 	final, _ := apolon.Set[Patient](db).
 		OrderBy(PatientFields.ID.Asc()).
 		AsNoTracking().
-		ToList()
+		ToSlice()
 	for _, p := range final {
 		fmt.Printf("  ID=%d, Name=%s, Age=%d\n", p.ID, p.Name, p.Age)
 	}

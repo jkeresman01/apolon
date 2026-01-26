@@ -38,7 +38,7 @@ func main() {
         Where(PatientFields.Age.Gt(18)).
         Where(PatientFields.Name.Contains("Smith")).
         OrderBy(PatientFields.Name.Asc()).
-        ToList()
+        ToSlice()
 
     // Change tracking
     patients[0].Name = "Updated"
@@ -65,7 +65,7 @@ db.Where("agee > ?", 18).Find(&patients) // Silent failure or runtime party
 apolon.Set[Patient](db).
     Where(PatientFields.Age.Gt(18)).
     Where(PatientFields.Name.Contains("Smith")).
-    ToList()
+    ToSlice()
 
 // Typo? Compiler catches it immediately.
 PatientFields.Agee.Gt(18) // Compile error: PatientFields has no field Agee

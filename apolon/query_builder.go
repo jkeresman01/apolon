@@ -122,8 +122,8 @@ func (q *Query[T]) ToSQL() (string, []any) {
 	return q.buildSQL()
 }
 
-// ToList executes the query and returns all matching results
-func (q *Query[T]) ToList() ([]T, error) {
+// ToSlice executes the query and returns all matching results
+func (q *Query[T]) ToSlice() ([]T, error) {
 	sql, args := q.buildSQL()
 
 	rows, err := q.apolon.conn.Query(sql, args...)
@@ -159,7 +159,7 @@ func (q *Query[T]) ToList() ([]T, error) {
 func (q *Query[T]) First() (*T, error) {
 	one := 1
 	q.limit = &one
-	results, err := q.ToList()
+	results, err := q.ToSlice()
 	if err != nil {
 		return nil, err
 	}

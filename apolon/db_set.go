@@ -27,9 +27,9 @@ func (s *DbSet[T]) OrderBy(o shared.OrderBy) *Query[T] {
 	return newQuery[T](s.db).OrderBy(o)
 }
 
-// ToList returns all entities of this type
-func (s *DbSet[T]) ToList() ([]T, error) {
-	return newQuery[T](s.db).ToList()
+// ToSlice returns all entities of this type
+func (s *DbSet[T]) ToSlice() ([]T, error) {
+	return newQuery[T](s.db).ToSlice()
 }
 
 // First returns the first entity or nil
