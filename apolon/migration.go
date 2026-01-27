@@ -56,8 +56,8 @@ func (mb *MigrationBuilder) buildColumnDefinition(col shared.ColumnInfo) string 
 		parts = append(parts, "NOT NULL")
 	}
 
-	// UNIQUE constraint
-	if col.IsUnique {
+	// UNIQUE constraint (skip for PKs, they're implicitly UNIQUE)
+	if col.IsUnique && !col.IsPrimaryKey {
 		parts = append(parts, "UNIQUE")
 	}
 
