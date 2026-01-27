@@ -11,12 +11,7 @@ cd docker
 docker compose up -d
 ```
 
-This starts PostgreSQL on `localhost:5432` with:
-- Database: `apolon_db`
-- User: `Josip` -- Don't care if exposed
-- Password: `Pa55w.rd` -- Don't care if exposed
-
-### 2. Generate Field Accessors
+### Generate Field Accessors
 
 Before running the demo, generate the type-safe field accessors:
 
@@ -31,7 +26,8 @@ Or using `go generate` (from project root):
 go generate ./apolon-demo/...
 ```
 
-This smth like a "partial class" `model_fields.go` from `model.go`, providing typed field accessors like `PatientFields.Age.Gt(18)`.
+This creates smth like a "partial class" `model_fields.go` from `model.go`,
+providing typed field accessors like `PatientFields.Age.Gt(18)`.
 
 ### 3. Run the Demo
 
@@ -58,3 +54,9 @@ type Patient struct {
 ```
 
 Then run `go generate ./...` from the project root to regenerate all fields.
+
+Field accessor are already generated for this demo example so you can just use 
+
+```bash
+go run .
+```
