@@ -90,7 +90,9 @@ func parseTagOption(col *ColumnInfo, opt string) {
 	switch {
 	case opt == "pk":
 		col.IsPrimaryKey = true
-		col.IsNotNull = true // PKs are implicitly NOT NULL
+		// PKs are implicitly NOT NULL and UNIQUE
+		col.IsNotNull = true
+		col.IsUnique = true
 	case opt == "notnull":
 		col.IsNotNull = true
 	case opt == "unique":
