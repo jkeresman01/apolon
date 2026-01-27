@@ -238,9 +238,22 @@ func scanStruct(rows scanner, dest any) error {
 	v := reflect.ValueOf(dest).Elem()
 	t := v.Type()
 
-	ptrs := make([]any, t.NumField())
+	ptrs := []any{}
 	for i := 0; i < t.NumField(); i++ {
-		ptrs[i] = v.Field(i).Addr().Interface()
+		f := t.Field(i)
+
+		// Skip unexported fields
+		if !f.IsExported() {
+			continue
+		}
+
+		// Skip fields with apolon:"-"
+		tag := f.Tag.Get("apolon")
+		if tag == "-" {
+			continue
+		}
+
+		ptrs = append(ptrs, v.Field(i).Addr().Interface())
 	}
 
 	return rows.Scan(ptrs...)

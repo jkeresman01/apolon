@@ -227,7 +227,10 @@ func (apolon *DB) executeInsert(execer interface {
 		return 0, fmt.Errorf("insert failed: %w", err)
 	}
 
-	n, _ := result.RowsAffected()
+	n, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
 	return int(n), nil
 }
 
@@ -278,7 +281,10 @@ func (apolon *DB) executeUpdate(execer interface {
 		return 0, fmt.Errorf("update failed: %w", err)
 	}
 
-	n, _ := result.RowsAffected()
+	n, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
 	return int(n), nil
 }
 
@@ -297,7 +303,10 @@ func (apolon *DB) executeDelete(execer interface {
 		return 0, fmt.Errorf("delete failed: %w", err)
 	}
 
-	n, _ := result.RowsAffected()
+	n, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
 	return int(n), nil
 }
 

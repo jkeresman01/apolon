@@ -21,7 +21,19 @@ func ParseModel(v interface{}) *ModelInfo {
 	fields := []string{}
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
+
+		// Skip unexported fields
+		if !f.IsExported() {
+			continue
+		}
+
 		tag := f.Tag.Get("apolon")
+
+		// Skip fields with apolon:"-"
+		if tag == "-" {
+			continue
+		}
+
 		if tag == "" {
 			tag = strings.ToLower(f.Name)
 		} else {
