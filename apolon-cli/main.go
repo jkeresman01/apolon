@@ -38,7 +38,7 @@ var generateCmd = &cobra.Command{
 	Short: "Generate field constants for models",
 	Long: `Generate field constants for models in the specified directory.
 
-This command parses Go files containing structs with db tags and generates
+This command parses Go files containing structs with apolon tags and generates
 corresponding *_fields.go files with typed field accessors for queries.`,
 	Example: `  apolon generate
   apolon generate --input ./models --output ./models
