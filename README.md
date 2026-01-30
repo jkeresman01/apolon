@@ -15,9 +15,9 @@
 > [!NOTE]
 > Still working on this, requires approximtlly additional 3 years of free time to finish
 
-Apolon is trying to bring Entity Framework-style patterns to Go: change tracking, unit of work, and type-safe queries. Unlike GORM's stringly-typed approach, Apolon generates typed field accessors at build time for compile-time query safety.
+Apolon is trying to bring Entity Framework-style patterns to Go: change tracking, unit of work, and type-safe queries.
 
-## Quick Example
+## Example
 
 ```go
 type Patient struct {
@@ -46,11 +46,11 @@ func main() {
 }
 ```
 
-## Design Decisions
+## Design Decisions && comparison to other ORMs
 
 ### GORM is cool ... but has few problems
 
-GORM is the most popular Go ORM (cool), but it relies heavily on strings and reflection at runtime:
+<h6><i>GORM is the most popular Go ORM (cool), but it relies heavily on strings and reflection at runtime: </i></h6>
 
 ```go
 // GORM - strings everywhere, no compile-time safety - very uncool
@@ -76,7 +76,7 @@ PatientFields.Agee.Gt(18) // Compile error: PatientFields has no field Agee
 
 ### Ent is cool ... but is a different beast
 
-Ent is a powerful entity framework backed by Meta. It takes a schema-first approach — you define fields in a DSL, and Ent generates everything (structs, builders, predicates) from that:
+<h6><i>Ent is a powerful entity framework backed by Meta. It takes a schema-first approach — you define fields in a DSL, and Ent generates everything (structs, builders, predicates) from that:</i></h6>
 
 ```go
 // Ent - schema defines the model, structs are generated
@@ -103,19 +103,19 @@ p.Age = 31
 db.SaveChanges() // Both changes flushed in one transaction
 ```
 
-Ent is stateless and operation-oriented — each write is an explicit builder
+<h6><i>Ent is stateless and operation-oriented — each write is an explicit builder
 call with no memory of what came before. Apolon tracks your entities in memory
 and flushes all changes at once via `SaveChanges()`, so you work with plain Go
-structs instead of builder chains.
+structs instead of builder chains.</i></h6>
 
-Ent also owns your types — it generates the structs, the predicates, and the
+<h6><i>Ent also owns your types — it generates the structs, the predicates, and the
 mutation API from its schema DSL. Apolon flips this: you own your structs, and
-the ORM reads them via tags. 
+the ORM reads them via tags.</i></h6>
 
 ### SQLBoiler is cool ... but starts from the other end
 
-SQLBoiler is a database-first ORM — it introspects your existing database
-schema and generates fully type-safe models and query helpers from it:
+<h6><i>SQLBoiler is a database-first ORM — it introspects your existing database
+schema and generates fully type-safe models and query helpers from it:</i></h6>
 
 ```go
 // SQLBoiler - database-first: schema lives in PostgreSQL, code is generated from it
@@ -149,9 +149,9 @@ apolon.Set[Patient](db).
     ToSlice()
 ```
 
-SQLBoiler generates the models for you from the database — you don't write
+<h6><i>SQLBoiler generates the models for you from the database — you don't write
 structs, it does. Apolon goes the other way: you write plain Go structs with
-tags, and the ORM derives the schema from them. 
+tags, and the ORM derives the schema from them.</i></h6>
 
 ```go
 // SQLBoiler - explicit updates, you specify every column
@@ -186,7 +186,7 @@ go get github.com/jkeresman01/apolon
 
 ### Generating Field Accessors
 
-Apolon requires generating typed field accessors for your models. Add the `go:generate` directive to your model file:
+<h6><i>Apolon requires generating typed field accessors for your models. Add the `go:generate` directive to your model file:</i></h6>
 
 ```go
 //go:generate go run github.com/jkeresman01/apolon/apolon-cli generate -i . -o .
@@ -204,9 +204,9 @@ Then run:
 go generate ./...
 ```
 
-This creates a `model_fields.go` file with typed accessors like `PatientFields.Age`, `PatientFields.Name`, etc. that you can use in queries.
+<h6><i>This creates a `model_fields.go` file with typed accessors like `PatientFields.Age`, `PatientFields.Name`, etc. that you can use in queries.</i></h6>
 
-You can also run the generator manually:
+<h6><i>You can also run the generator manually:</i></h6>
 
 ```bash
 go run github.com/jkeresman01/apolon/apolon-cli generate -i ./models -o ./models
@@ -215,5 +215,6 @@ go run github.com/jkeresman01/apolon/apolon-cli generate -i ./models -o ./models
 ### Resources ###
 
 https://entgo.io/docs/schema-fields
+
 https://gorm.io/docs/
 
