@@ -74,6 +74,44 @@ PatientFields.Agee.Gt(18) // Compile error: PatientFields has no field Agee
 <h6><i>Generated field accessors catch errors at compile time, not in production.</i></h6>
 
 
+### Ent is cool ... but is a different beast
+
+Ent is a powerful entity framework backed by Meta. It takes a schema-first approach — you define fields in a DSL, and Ent generates everything (structs, builders, predicates) from that:
+
+```go
+// Ent - schema defines the model, structs are generated
+func (Patient) Fields() []ent.Field {
+    return []ent.Field{
+        field.String("name").NotEmpty().MaxLen(100),
+        field.Int("age").Positive(),
+    }
+}
+
+client.Patient.Create().SetName("John").SetAge(30).Save(ctx)
+
+// Want to update two fields? Two separate calls.
+client.Patient.UpdateOneID(id).SetName("Jane").Save(ctx)
+client.Patient.UpdateOneID(id).SetAge(31).Save(ctx)
+```
+
+```go
+// Apolon - your struct is the schema, changes are tracked
+p, _ := apolon.Set[Patient](db).Find(id)
+
+p.Name = "Robert MeDiro"
+p.Age = 31
+db.SaveChanges() // Both changes flushed in one transaction
+```
+
+Ent is stateless and operation-oriented — each write is an explicit builder
+call with no memory of what came before. Apolon tracks your entities in memory
+and flushes all changes at once via `SaveChanges()`, so you work with plain Go
+structs instead of builder chains.
+
+Ent also owns your types — it generates the structs, the predicates, and the
+mutation API from its schema DSL. Apolon flips this: you own your structs, and
+the ORM reads them via tags. 
+
 <h6><i>If you're familiar with Entity Framework, Apolon should feel natural.
 The main difference is using generated field types instead of lambda
 expressions (Go doesn't have those - so we do a bit of magic).</i></h6>
@@ -118,3 +156,9 @@ You can also run the generator manually:
 ```bash
 go run github.com/jkeresman01/apolon/apolon-cli generate -i ./models -o ./models
 ```
+
+### Resources ###
+
+https://entgo.io/docs/schema-fields
+https://gorm.io/docs/
+
